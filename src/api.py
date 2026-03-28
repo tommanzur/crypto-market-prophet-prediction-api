@@ -30,7 +30,7 @@ async def get_forecast(request: Request, symbol: str, years: int, forecast_years
     start_date = (datetime.now() - timedelta(days=years * 365)).strftime('%Y-%m-%d')
     data = load_data(symbol, start_date)
     df_train = data.rename(columns={'timestamp': 'ds', 'close': 'y'})
-    m = Prophet()
+    m = Prophet(stan_backend="PYSTAN")
     m.fit(df_train)
     future = m.make_future_dataframe(periods=forecast_years * 365)
     forecast = m.predict(future)
